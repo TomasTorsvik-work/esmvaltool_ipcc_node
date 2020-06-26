@@ -1,0 +1,75 @@
+################################################################################
+# User's configuration file for ESMValTool
+################################################################################
+---
+
+# Rootpaths to the data from different projects (lists are also possible)
+rootpath:
+  CMIP5: [/projects/NS9252K/ESGF/cmip5/output1]
+  CMIP6: [/projects/NS9252K/ESGF/CMIP6,/projects/NS9034K/CMIP6]
+  OBS: [/projects/NS9252K/obsdata]
+  RAWOBS: /projects/NS9252K/rawobsdata
+  default: ~/default_inputpath
+
+# Directory structure for input data: [default]/BADC/DKRZ/ETHZ/etc
+# See config-developer.yml for definitions.
+drs:
+  CMIP5: DKRZ
+  CMIP6: DKRZ
+
+# Run at most this many tasks in parallel null/[1]/2/3/4/..
+# Set to null to use the number of available CPUs.
+# Make sure your system has enough memory for the specified number of tasks.
+max_parallel_tasks: 1
+
+
+# Destination directory where all output will be written
+# including log files and performance stats
+output_dir: ./esmvaltool_output
+
+
+# Auxiliary data directory (used for some additional datasets)
+# this is where e.g. files can be downloaded to by a download
+# script embedded in the diagnostic
+#auxiliary_data_dir: ~/esmvaltool/auxiliary_data
+auxiliary_data_dir: ./auxiliary_data
+
+
+# Diagnostics create plots? [true]/false
+# turning it off will turn off graphical output from diagnostic
+write_plots: true
+
+# Diagnositcs write NetCDF files? [true]/false
+# turning it off will turn off netCDF output from diagnostic
+write_netcdf: true
+
+# Set the console log level debug, [info], warning, error
+# for much more information printed to screen set log_level: debug
+log_level: info
+
+# Exit on warning? true/[false]
+exit_on_warning: false
+
+# Plot file format? [ps]/pdf/png/eps/epsi
+output_file_type: png
+
+# Use netCDF compression true/[false]
+compress_netcdf: false
+
+# Save intermediary cubes in the preprocessor true/[false]
+# set to true will save the output cube from each preprocessing step
+# these files are numbered according to the preprocessing order
+save_intermediary_cubes: false
+
+# Remove the preproc dir if all fine
+# if this option is set to "true", ALL preprocessor files will be removed
+# CAUTION when using: if you need those files, set it to false
+remove_preproc_dir: false
+
+# Path to custom config-developer file, to customise project configurations.
+# See config-developer.yml for an example. Set to None to use the default
+config_developer_file: null
+
+# Get profiling information for diagnostics
+# Only available for Python diagnostics
+profile_diagnostic: false
