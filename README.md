@@ -40,11 +40,11 @@ Note, use the updated /conda/esmvaltool/2.x.xbx version
 4. copy the following config file and recipe to your favourite place
 ```bash
  /projects/NS9252K/share/tomast/esmvaltool_ipcc_node/config-ipcc_node.yml
- /projects/NS9252K/share/tomast/esmvaltool_ipcc_node/standard_recipes/recipe_ocean_example.yml
+ /projects/NS9252K/share/tomast/esmvaltool_ipcc_node/NorESM-CMIP5_recipes/standard_recipes/examples/recipe_python.yml
 ```
 5. run `esmvaltool`
 ```bash
-esmvaltool -c config-ipcc_node.yml ./recipe_ocean_example.yml
+esmvaltool -c config-ipcc_node.yml ./recipe_python.yml
 ```
 
 **All are encouraged to share your successfully configured recipes under `/projects/NS9252K/share` !!**
