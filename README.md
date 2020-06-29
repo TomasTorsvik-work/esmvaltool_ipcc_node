@@ -1,4 +1,4 @@
-# Setup for woking with ESMValTool on the Nird-IPCC node
+# Working with ESMValTool on the Nird-IPCC node
 
 2020-06-26 : Current installed version of ESMValTool : 2.0.0b4
 
