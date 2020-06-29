@@ -10,31 +10,41 @@
 Run ESMValTool on NIRD service node
 ===================================
 
-The ESMValTool is currently installed under the dedicated IPCC service node (``ipcc.nird.sigma2.no``) for data post-processing. The following NIRD project areas are mounted under ``/projects`` of the ``IPCC`` node: NS2345K, NS9034K, NS9039K, NS9252K, NS9560K, NS9588K.
+The ESMValTool is currently installed under the dedicated IPCC service node (``ipcc.nird.sigma2.no``) for data post-processing. The following NIRD project areas are mounted under ``/projects`` of the ``IPCC`` node: NS2345K, NS2980K, NS9034K, NS9039K, NS9252K, NS9560K, NS9588K.
 
 Activate and run ESMValTool
 ---------------------------
 
 An example of steps to run the ESMValTool on ipcc.nird.sigma2.no
 
-1. login in the ipcc node:
+1. login in the ipcc node
+```bash
+ssh -l username ipcc.nird.sigma2.no
+```
+2. Execute
+```bash
+source /conda/miniconda3/etc/profile.d/conda.sh
+```
+(or add to your `.bashrc` file, for example, if you are using bash SHELL)
+```bash
+if [ $(hostname -f |grep 'nird.ipcc') ] && [ -f /conda/miniconda3/etc/profile.d/conda.sh ]; then
+    . /conda/miniconda3/etc/profile.d/conda.sh
+fi
+```
+3. load ESMValTool on nird
+```bash
+conda activate /conda/esmvaltool/2.0.0b4
+```
+Note, use the updated /conda/esmvaltool/2.x.xbx version
 
->  ssh -l username ipcc.nird.sigma2.no
+4. copy the following config file and recipe to your favourite place
+```bash
+ /projects/NS9252K/share/tomast/esmvaltool_ipcc_node/config-ipcc_node.yml
+ /projects/NS9252K/share/tomast/esmvaltool_ipcc_node/standard_recipes/recipe_ocean_example.yml
+```
+5. run `esmvaltool`
+```bash
+esmvaltool -c config-ipcc_node.yml ./recipe_ocean_example.yml
+```
 
-2. load ESMValTool on nird:
-
->  conda active /conda/esmvaltool/2.0.0b4/
-
-(note, the esmvaltool may be upgraded in the future. Therefore, use ``ls /conda/esmvaltool/`` to check the currently installed vesion if 2.0.0b4 does not exist.)
-
-3. copy the following config file and recipe to your favourite place: 
-
->  /projects/NS9252K/share/tomast/esmvaltool_ipcc_node/config-ipcc_node.yml    \
->  /projects/NS9252K/share/tomast/esmvaltool_ipcc_node/standard_recipes/recipe_ocean_example.yml
-    
-You should copy and modify the config_heyc.yml file to store some intermediate data files and final plots to your own directory.
-
-4. run ``esmvaltool``:
-
->  esmvaltool -c config-ipcc_node.yml ./recipe_ocean_example.yml
-
+**All are encouraged to share your successfully configured recipes under `/projects/NS9252K/share` !!**
