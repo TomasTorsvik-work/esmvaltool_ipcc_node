@@ -48,3 +48,18 @@ esmvaltool -c config-ipcc_node.yml ./recipe_python.yml
 ```
 
 **All are encouraged to share your successfully configured recipes under `/projects/NS9252K/share` !!**
+
+
+Run ESMValTool for NorCPM1 and NorESM1-F datasets
+-------------------------------------------------
+
+ESMValTool includes configuration settings for most CMIP5 and CMIP6 datasets, but this does not include the ``NorCMP1`` and ``NorESM1-F`` datasets. These datasets can be loaded almost like any other CMIP6 dataset, but it is necessary to specify an ``institute`` key. This can be done in one of two ways:
+
+1. Add the ``institute`` key into every dataset specification for ``NorCPM1`` and ``NorESM1-F``
+```bash
+  - {dataset: NorCPM1, project: CMIP6, exp: historical, ensemble: r1i1p1f1, grid: gn, institute: NCC}
+```
+
+2. Modify the ``config-developer.yml`` file to include the ``institute`` setting for ``NorCPM1`` and ``NorESM1-F``. This has been done in the file ``config-developer-NorESM.yml``. It is then necessary to specify that a customized developer config file is used, which has been done in ``config-ipcc_node-NorESM.yml``.
+
+Method (1) is recommended if you only use a few ``NorCPM1`` or ``NorESM1-F`` datasets, since this will make the recipe self-contained (not dependent on a customized developer file) and easy to share with others. If you work extensively on ``NorCPM1`` or ``NorESM1-F`` datasets, you may consider using method (2) with a customized developer config file.
