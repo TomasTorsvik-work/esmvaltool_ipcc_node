@@ -6,6 +6,7 @@
 - Discussion group on [ESMValTool for Nird users](https://github.com/orgs/NorESMhub/teams/esmvaltool-on-nird)
 - [ESMValTool on gitHub](https://github.com/ESMValGroup/ESMValTool)
 - [ESMValTool documentation](https://docs.esmvaltool.org/en/latest/?badge=latest)
+- List of [working recipes in this repository](https://github.com/TomasTorsvik-work/esmvaltool_ipcc_node/blob/master/recipes_list.md)
 
 Run ESMValTool on NIRD service node
 ===================================
