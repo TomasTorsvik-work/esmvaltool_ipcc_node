@@ -6,6 +6,9 @@ standard_recipes/
 recipe_ocean_example:
   project: CMIP5, mip: Omon, exp: historical, ensemble: r1i1p1
   dataset: HadGEM2-CC, HadGEM2-ES
+recipe_ocean_Landschuetzer2016:
+  project: CMIP5, mip: Omon, exp: historical, ensemble: r1i1p1
+  dataset: CanESM2
 ```
 
 standard_recipes/examples/
