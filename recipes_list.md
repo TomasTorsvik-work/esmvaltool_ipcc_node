@@ -3,10 +3,10 @@
 standard_recipes/
 -----------------
 ```
-recipe_ocean_example:
+recipe_ocean_example.yml:
   project: CMIP5, mip: Omon, exp: historical, ensemble: r1i1p1
   dataset: HadGEM2-CC, HadGEM2-ES
-recipe_ocean_Landschuetzer2016:
+recipe_ocean_Landschuetzer2016.yml:
   project: CMIP5, mip: Omon, exp: historical, ensemble: r1i1p1
   dataset: CanESM2
 ```
