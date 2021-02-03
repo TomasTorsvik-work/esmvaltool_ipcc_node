@@ -1,22 +1,34 @@
 # List of working recipes in esmvaltool_ipcc_node repository
 
+standard_recipes_2.1.1
+----------------------
+```
+examples/recipe_python.yml:
+  dataset-CMIP5: CanESM2
+  dataset-CMIP6: BCC-ESM1
+recipe_ocean_example.yml:
+  dataset-CMIP5: HadGEM2-CC, HadGEM2-ES
+recipe_ocean_ice_extent.yml:
+  dataset-CMIP5: HadGEM2-CC, HadGEM2-ES
+recipe_ocean_Landschuetzer2016.yml:
+  dataset-CMIP5: CanESM2
+recipe_ocean_bgc.yml:
+  dataset-CMIP5: HadGEM2-ES
+```
+
+
 standard_recipes/
 -----------------
 ```
+examples/recipe_python.yml:
+  project: CMIP5, mip: Amon, exp: historical, ensemble: r1i1p1
+  dataset: CanESM2, MPI-ESM-LR
 recipe_ocean_example.yml:
   project: CMIP5, mip: Omon, exp: historical, ensemble: r1i1p1
   dataset: HadGEM2-CC, HadGEM2-ES
 recipe_ocean_Landschuetzer2016.yml:
   project: CMIP5, mip: Omon, exp: historical, ensemble: r1i1p1
   dataset: CanESM2
-```
-
-standard_recipes/examples/
---------------------------
-```
-recipe_python.yml:
-  project: CMIP5, mip: Amon, exp: historical, ensemble: r1i1p1
-  dataset: CanESM2, MPI-ESM-LR
 ```
 
 NorESM-CMIP5_recipes/standard_recipes/
