@@ -2,6 +2,10 @@
 
 standard_recipes_2.1.1
 ----------------------
+
+* Work with standard run flags
+esmvaltool run --config_file=./config-ipcc_node.yml <recipe_file>
+
 ```
 examples/recipe_python.yml:
   dataset-CMIP5: CanESM2
@@ -16,6 +20,23 @@ recipe_ocean_bgc.yml:
   dataset-CMIP5: HadGEM2-ES
 ```
 
+* Work when skipping some data sets
+esmvaltool run --skip_nonexistent=True --config_file=./config-ipcc_node.yml <recipe_file>
+
+```
+recipe_ocean_amoc.yml:
+  dataset-CMIP5: 
+recipe_ocean_multimap.yml:
+  dataset-CMIP5: 
+recipe_ocean_scalar_fields.yml:
+  dataset-CMIP5: 
+```
+
+* Not working, even when skipping some data sets
+
+```
+recipe_ocean_quadmap.yml
+```
 
 standard_recipes/
 -----------------
