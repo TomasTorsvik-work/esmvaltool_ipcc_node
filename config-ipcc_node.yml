@@ -5,9 +5,18 @@
 
 # Rootpaths to the data from different projects (lists are also possible)
 rootpath:
-  CMIP5: [/projects/NS9252K/ESGF/cmip5/output1]
-  CMIP6: [/projects/NS9252K/ESGF/CMIP6,/projects/NS9034K/CMIP6]
+  # CMIP3:
+  CMIP5: [/projects/NS9252K/ESGF/cmip5/output1,
+          /projects/NS9252K/ESGF/cmip5/output2,
+          /projects/NS9034K/CMIP5/output1,
+          /projects/NS9034K/CMIP5/output2]
+  CMIP6: [/projects/NS9252K/ESGF/CMIP6,
+          /projects/NS9034K/CMIP6]
   OBS: [/projects/NS9252K/obsdata]
+  # OBS6:
+  obs4mips: [/projects/NS9252K/ESGF/obs4MIPs]
+  # ana4mips:
+  # native6:
   RAWOBS: /projects/NS9252K/rawdata/obs
   default: ~/default_inputpath
 

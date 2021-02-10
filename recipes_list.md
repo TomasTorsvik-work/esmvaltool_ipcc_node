@@ -8,34 +8,27 @@ esmvaltool run --config_file=./config-ipcc_node.yml <recipe_file>
 
 ```
 examples/recipe_python.yml:
-  dataset-CMIP5: CanESM2
-  dataset-CMIP6: BCC-ESM1
-recipe_ocean_example.yml:
-  dataset-CMIP5: HadGEM2-CC, HadGEM2-ES
-recipe_ocean_ice_extent.yml:
-  dataset-CMIP5: HadGEM2-CC, HadGEM2-ES
-recipe_ocean_Landschuetzer2016.yml:
-  dataset-CMIP5: CanESM2
+recipe_ocean_amoc.yml:
 recipe_ocean_bgc.yml:
-  dataset-CMIP5: HadGEM2-ES
+recipe_ocean_example.yml:
+recipe_ocean_ice_extent.yml:
+recipe_ocean_Landschuetzer2016.yml:
+recipe_ocean_multimap.yml:
+recipe_ocean_quadmap.yml
+recipe_ocean_scalar_fields.yml:
 ```
 
 * Work when skipping some data sets
 esmvaltool run --skip_nonexistent=True --config_file=./config-ipcc_node.yml <recipe_file>
 
 ```
-recipe_ocean_amoc.yml:
-  dataset-CMIP5: 
-recipe_ocean_multimap.yml:
-  dataset-CMIP5: 
-recipe_ocean_scalar_fields.yml:
-  dataset-CMIP5: 
+<None at the moment>
 ```
 
 * Not working, even when skipping some data sets
 
 ```
-recipe_ocean_quadmap.yml
+recipe_arctic_ocean.yml
 ```
 
 standard_recipes/
