@@ -1,27 +1,32 @@
 # List of working recipes in esmvaltool_ipcc_node repository
 
-standard_recipes_2.1.1
-----------------------
+standard_recipes_2.1.1/
+-----------------------
 
 * Work with standard run flags
-esmvaltool run --config_file=./config-ipcc_node.yml <recipe_file>
 
 ```
-examples/recipe_python.yml:
-recipe_ocean_amoc.yml:
-recipe_ocean_bgc.yml:
-recipe_ocean_example.yml:
-recipe_ocean_ice_extent.yml:
-recipe_ocean_Landschuetzer2016.yml:
-recipe_ocean_multimap.yml:
-recipe_ocean_quadmap.yml
-recipe_ocean_scalar_fields.yml:
+$ esmvaltool run --config_file=./config-ipcc_node.yml <recipe_file>
+
+examples/
+  examples/recipe_python.yml
+  
+ocean recipes:
+  recipe_ocean_amoc.yml
+  recipe_ocean_bgc.yml
+  recipe_ocean_example.yml
+  recipe_ocean_ice_extent.yml
+  recipe_ocean_Landschuetzer2016.yml
+  recipe_ocean_multimap.yml
+  recipe_ocean_quadmap.yml
+  recipe_ocean_scalar_fields.yml
 ```
 
 * Work when skipping some data sets
-esmvaltool run --skip_nonexistent=True --config_file=./config-ipcc_node.yml <recipe_file>
 
 ```
+$ esmvaltool run --skip_nonexistent=True --config_file=./config-ipcc_node.yml <recipe_file>
+
 <None at the moment>
 ```
 
