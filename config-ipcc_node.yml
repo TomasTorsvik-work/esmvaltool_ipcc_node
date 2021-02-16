@@ -5,18 +5,18 @@
 
 # Rootpaths to the data from different projects (lists are also possible)
 rootpath:
-  # CMIP3:
+  CMIP3: ~/default_cmip3
   CMIP5: [/projects/NS9252K/ESGF/cmip5/output1,
           /projects/NS9252K/ESGF/cmip5/output2,
           /projects/NS9034K/CMIP5/output1,
           /projects/NS9034K/CMIP5/output2]
   CMIP6: [/projects/NS9252K/ESGF/CMIP6,
           /projects/NS9034K/CMIP6]
-  OBS: [/projects/NS9252K/obsdata]
-  # OBS6:
-  obs4mips: [/projects/NS9252K/ESGF/obs4MIPs]
-  # ana4mips:
-  # native6:
+  OBS: /projects/NS9252K/obsdata
+  OBS6: /projects/NS9252K/obsdata
+  obs4mips: /projects/NS9252K/obsdata
+  ana4mips: ~/default_ana4mips
+  native6: ~/default_native6
   RAWOBS: /projects/NS9252K/rawdata/obs
   default: ~/default_inputpath
 
@@ -25,6 +25,8 @@ rootpath:
 drs:
   CMIP5: DKRZ
   CMIP6: DKRZ
+  OBS6: default
+  obs4mips: default
 
 # Run at most this many tasks in parallel null/[1]/2/3/4/..
 # Set to null to use the number of available CPUs.

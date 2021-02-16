@@ -12,6 +12,7 @@ examples/
   examples/recipe_python.yml
   
 ocean recipes:
+  recipe_arctic_ocean.yml
   recipe_ocean_amoc.yml
   recipe_ocean_bgc.yml
   recipe_ocean_example.yml
@@ -33,7 +34,12 @@ $ esmvaltool run --skip_nonexistent=True --config_file=./config-ipcc_node.yml <r
 * Not working, even when skipping some data sets
 
 ```
-recipe_arctic_ocean.yml
+recipe_lauer13jclim.yml
+recipe_perfmetrics_CMIP5.yml
+recipe_perfmetrics_CMIP5_4cds.yml
+recipe_perfmetrics_land_CMIP5.yml
+recipe_smpi.yml
+recipe_smpi_4cds.yml
 ```
 
 standard_recipes/
