@@ -28,10 +28,16 @@ preprocessors:
   # --------------------------------------------------
   # Time series preprocessors
   # --------------------------------------------------
+  # Modifications:
+  #   'area_statistics' and 'volume_statistics'
+  #   methods require additional grid information
+  #   in form of fx files (areacello, volcello)
+  #   when working with irregular grids
   prep_timeseries_1: # For 2D fields
     custom_order: true
     area_statistics:
       operator: mean
+      fx_variables: ['areacello']
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
@@ -43,6 +49,7 @@ preprocessors:
       scheme: linear_horizontal_extrapolate_vertical
     area_statistics:
       operator: mean
+      fx_variables: ['areacello']
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
@@ -56,6 +63,7 @@ preprocessors:
       end_latitude: 80.
     area_statistics:
       operator: mean
+      fx_variables: ['areacello']
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
@@ -72,6 +80,7 @@ preprocessors:
       end_latitude: 80.
     area_statistics:
       operator: mean
+      fx_variables: ['areacello']
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
@@ -80,6 +89,7 @@ preprocessors:
     custom_order: true
     volume_statistics:
       operator: mean
+      fx_variables: ['volcello']
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
@@ -93,10 +103,18 @@ preprocessors:
       end_latitude: 80.
     volume_statistics:
       operator: mean
+      fx_variables: ['volcello']
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
 
+  # Modifications:
+  #   The 'extract_volume' method returns a new iris
+  #   cube with differnt dimensions from the original
+  #   dataset. This can not be combined with volcello
+  #   data when doing 'volume_statistics'. One solution
+  #   is to regrid the data to a regular grid before
+  #   executing the volume statistics step.
   prep_timeseries_7: # For regional volume averaged (at the surface)
     custom_order: true
     extract_region:
@@ -107,6 +125,9 @@ preprocessors:
     extract_volume:
       z_min: 0.
       z_max: 100.
+    regrid:
+      target_grid: 1x1
+      scheme: linear
     volume_statistics:
       operator: mean
     multi_model_statistics:
@@ -128,24 +149,23 @@ preprocessors:
       scheme: linear
     climate_statistics:
       operator: mean
-    multi_model_statistics:
-      span: overlap
-      statistics: [mean ]
-
+    # multi_model_statistics:
+    #   span: overlap
+    #   statistics: [mean ]
 
   prep_map_3: # For specific levels of 3D fields with regrid
     custom_order: true
     extract_levels:
       levels: [0., 10., 100., 1000.,]
       scheme: linear_horizontal_extrapolate_vertical
-    climate_statistics:
-      operator: mean
     regrid:
       target_grid: 1x1
       scheme: linear
-    multi_model_statistics:
-      span: overlap
-      statistics: [mean ]
+    climate_statistics:
+      operator: mean
+    # multi_model_statistics:
+    #   span: overlap
+    #   statistics: [mean ]
 
   prep_map_4: # For a specific region with regrid
     custom_order: true
@@ -154,22 +174,20 @@ preprocessors:
       end_longitude: 30.
       start_latitude: -80.
       end_latitude: 80.
-    climate_statistics:
-      operator: mean
     regrid:
       target_grid: 1x1
       scheme: linear
-    multi_model_statistics:
-      span: overlap
-      statistics: [mean ]
+    climate_statistics:
+      operator: mean
+    # multi_model_statistics:
+    #   span: overlap
+    #   statistics: [mean ]
 
   prep_map_5: # For a specific region at depth levels,
     custom_order: true
     extract_levels:
       levels: [0., 10., 100., 1000.,]
       scheme: linear_horizontal_extrapolate_vertical
-    climate_statistics:
-      operator: mean
     extract_region:
       start_longitude: -80.
       end_longitude: 30.
@@ -178,9 +196,11 @@ preprocessors:
     regrid:
       target_grid: 1x1
       scheme: linear
-    multi_model_statistics:
-      span: overlap
-      statistics: [mean ]
+    climate_statistics:
+      operator: mean
+    # multi_model_statistics:
+    #   span: overlap
+    #   statistics: [mean ]
 
   # --------------------------------------------------
   # Transects preprocessors
@@ -193,9 +213,22 @@ preprocessors:
       longitudes: [332.,332.]
       number_points: 4              # VERY SLOW with high numbers!
 
+  # Modifications:
+  #   The 'extract_transect' method does not work with irregular
+  #   grids. One solution is to regrid to a regular grid before
+  #   running the extract_transect procedure. The 'extract_region'
+  #   method can be used to reduce the data prior to regridding.
   prep_transect_2: # For extracting a transect
     climate_statistics:
       operator: mean
+    extract_region:
+      start_longitude: 119.
+      end_longitude: 301.
+      start_latitude: -1.
+      end_latitude: 1.
+    regrid:        # transect method not working for irregular grids
+      target_grid: 1x1
+      scheme: linear
     extract_transect: # Pacific Equator
       latitude: 0.
       longitude: [120., 300.]
@@ -203,6 +236,14 @@ preprocessors:
   prep_transect_3: # For extracting a transect
     climate_statistics:
       operator: mean
+    extract_region:
+      start_longitude: 331.
+      end_longitude: 333.
+      start_latitude: -51.
+      end_latitude: 51.
+    regrid:        # transect method not working for irregular grids
+      target_grid: 1x1
+      scheme: linear
     extract_transect: # Atlantic Meridional Transect
       latitude: [-50.,50.]
       longitude: 332.
@@ -210,9 +251,14 @@ preprocessors:
   # --------------------------------------------------
   # Depth-profile preprocessors
   # --------------------------------------------------
+  # Modifications:
+  #   'area_statistics' require additional grid 
+  #   information in form of fx files (areacello)
+  #   when working with irregular grids
   prep_profile_1: # For a global profile
     area_statistics:
       operator: mean
+      fx_variables: ['areacello']
 
   prep_profile_2: # For a regional profile
     extract_region:
@@ -225,6 +271,7 @@ preprocessors:
       z_max: 100.
     area_statistics:
       operator: mean
+      fx_variables: ['areacello']
 
 
   # --------------------------------------------------
@@ -306,7 +353,7 @@ diagnostics:
       Regional_VolumeAverage_Ocean_Physics_timeseries: &Regional_VolumeAverage_Ocean_Physics_timeseries
         script: ocean/diagnostic_timeseries.py
 
-  diag_timeseries_7:
+  diag_timeseries_7:   # Mismatch between extracted cube and 'volcello'
     description: Regional Volume to 100m depth average diagnostics
     variables:
       thetao: # Temperature ocean 3D averaged over top 100m

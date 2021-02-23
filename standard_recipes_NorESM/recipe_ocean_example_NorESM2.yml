@@ -21,21 +21,34 @@ documentation:
 
 
 datasets:
-  - {dataset: NorESM1-M, project: CMIP5, mip: Omon, exp: historical, ensemble: r1i1p1, start_year: 2001, end_year: 2004}
-  - {dataset: NorESM1-ME, project: CMIP5, mip: Omon, exp: historical, ensemble: r1i1p1, start_year: 2001, end_year: 2004}
+  - {dataset: NorESM2-LM, project: CMIP6, mip: Omon, exp: historical, ensemble: r1i1p1f1, start_year: 2001, end_year: 2004}
+  - {dataset: NorESM2-MM, project: CMIP6, mip: Omon, exp: historical, ensemble: r1i1p1f1, start_year: 2001, end_year: 2004}
 
 preprocessors:
   # --------------------------------------------------
   # Time series preprocessors
   # --------------------------------------------------
+  # Modifications:
+  #   'area_statistics' and 'volume_statistics'
+  #   methods require additional grid information
+  #   in form of fx files (areacello, volcello)
+  #   when working with irregular grids
   prep_timeseries_1: # For 2D fields
     custom_order: true
     area_statistics:
       operator: mean
+      fx_variables: ['areacello']
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
 
+  # Modifications:
+  #   There is no 'areacello' variable associated with
+  #   the regridded datataset 'gr'. We need to
+  #   specify that 'area_statistics' should use the
+  #   native grid version 'gn' for 'areacello' when
+  #   calculations are made with datasets using the
+  #   'gr' grid type.
   prep_timeseries_2: # For specific levels of 3D fields
     custom_order: true
     extract_levels:
@@ -43,6 +56,7 @@ preprocessors:
       scheme: linear_horizontal_extrapolate_vertical
     area_statistics:
       operator: mean
+      fx_variables: [{'short_name': 'areacello', 'grid': 'gn'}]
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
@@ -56,6 +70,7 @@ preprocessors:
       end_latitude: 80.
     area_statistics:
       operator: mean
+      fx_variables: ['areacello']
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
@@ -72,6 +87,7 @@ preprocessors:
       end_latitude: 80.
     area_statistics:
       operator: mean
+      fx_variables: [{'short_name': 'areacello', 'grid': 'gn'}]
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
@@ -80,6 +96,7 @@ preprocessors:
     custom_order: true
     volume_statistics:
       operator: mean
+      fx_variables: ['volcello']
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
@@ -93,10 +110,18 @@ preprocessors:
       end_latitude: 80.
     volume_statistics:
       operator: mean
+      fx_variables: ['volcello']
     multi_model_statistics:
       span: overlap
       statistics: [mean ]
 
+  # Modifications:
+  #   The 'extract_volume' method returns a new iris
+  #   cube with differnt dimensions from the original
+  #   dataset. This can not be combined with volcello
+  #   data when doing 'volume_statistics'. One solution
+  #   is to regrid the data to a regular grid before
+  #   executing the volume statistics step.
   prep_timeseries_7: # For regional volume averaged (at the surface)
     custom_order: true
     extract_region:
@@ -107,6 +132,9 @@ preprocessors:
     extract_volume:
       z_min: 0.
       z_max: 100.
+    regrid:
+      target_grid: 1x1
+      scheme: linear
     volume_statistics:
       operator: mean
     multi_model_statistics:
@@ -128,24 +156,23 @@ preprocessors:
       scheme: linear
     climate_statistics:
       operator: mean
-    multi_model_statistics:
-      span: overlap
-      statistics: [mean ]
-
+    # multi_model_statistics:
+    #   span: overlap
+    #   statistics: [mean ]
 
   prep_map_3: # For specific levels of 3D fields with regrid
     custom_order: true
     extract_levels:
       levels: [0., 10., 100., 1000.,]
       scheme: linear_horizontal_extrapolate_vertical
-    climate_statistics:
-      operator: mean
     regrid:
       target_grid: 1x1
       scheme: linear
-    multi_model_statistics:
-      span: overlap
-      statistics: [mean ]
+    climate_statistics:
+      operator: mean
+    # multi_model_statistics:
+    #   span: overlap
+    #   statistics: [mean ]
 
   prep_map_4: # For a specific region with regrid
     custom_order: true
@@ -154,22 +181,20 @@ preprocessors:
       end_longitude: 30.
       start_latitude: -80.
       end_latitude: 80.
-    climate_statistics:
-      operator: mean
     regrid:
       target_grid: 1x1
       scheme: linear
-    multi_model_statistics:
-      span: overlap
-      statistics: [mean ]
+    climate_statistics:
+      operator: mean
+    # multi_model_statistics:
+    #   span: overlap
+    #   statistics: [mean ]
 
   prep_map_5: # For a specific region at depth levels,
     custom_order: true
     extract_levels:
       levels: [0., 10., 100., 1000.,]
       scheme: linear_horizontal_extrapolate_vertical
-    climate_statistics:
-      operator: mean
     extract_region:
       start_longitude: -80.
       end_longitude: 30.
@@ -178,9 +203,11 @@ preprocessors:
     regrid:
       target_grid: 1x1
       scheme: linear
-    multi_model_statistics:
-      span: overlap
-      statistics: [mean ]
+    climate_statistics:
+      operator: mean
+    # multi_model_statistics:
+    #   span: overlap
+    #   statistics: [mean ]
 
   # --------------------------------------------------
   # Transects preprocessors
@@ -193,9 +220,22 @@ preprocessors:
       longitudes: [332.,332.]
       number_points: 4              # VERY SLOW with high numbers!
 
+  # Modifications:
+  #   The 'extract_transect' method does not work with irregular
+  #   grids. One solution is to regrid to a regular grid before
+  #   running the extract_transect procedure. The 'extract_region'
+  #   method can be used to reduce the data prior to regridding.
   prep_transect_2: # For extracting a transect
     climate_statistics:
       operator: mean
+    extract_region:
+      start_longitude: 119.
+      end_longitude: 301.
+      start_latitude: -1.
+      end_latitude: 1.
+    regrid:        # transect method not working for irregular grids
+      target_grid: 1x1
+      scheme: linear
     extract_transect: # Pacific Equator
       latitude: 0.
       longitude: [120., 300.]
@@ -203,6 +243,14 @@ preprocessors:
   prep_transect_3: # For extracting a transect
     climate_statistics:
       operator: mean
+    extract_region:
+      start_longitude: 331.
+      end_longitude: 333.
+      start_latitude: -51.
+      end_latitude: 51.
+    regrid:        # transect method not working for irregular grids
+      target_grid: 1x1
+      scheme: linear
     extract_transect: # Atlantic Meridional Transect
       latitude: [-50.,50.]
       longitude: 332.
@@ -210,9 +258,14 @@ preprocessors:
   # --------------------------------------------------
   # Depth-profile preprocessors
   # --------------------------------------------------
+  # Modifications:
+  #   'area_statistics' require additional grid 
+  #   information in form of fx files (areacello)
+  #   when working with irregular grids
   prep_profile_1: # For a global profile
     area_statistics:
       operator: mean
+      fx_variables: [{'short_name': 'areacello', 'grid': 'gn'}]
 
   prep_profile_2: # For a regional profile
     extract_region:
@@ -225,6 +278,7 @@ preprocessors:
       z_max: 100.
     area_statistics:
       operator: mean
+      fx_variables: [{'short_name': 'areacello', 'grid': 'gn'}]
 
 
   # --------------------------------------------------
@@ -245,6 +299,7 @@ diagnostics:
     variables:
       thetao: # Temperature ocean
         preprocessor: prep_depth_integration_1
+        grid: gr
     scripts:
       Global_Ocean_DepthIntegration_map:
         script: ocean/diagnostic_maps.py
@@ -257,6 +312,7 @@ diagnostics:
     variables:
       tos: # Temperature ocean surface
         preprocessor: prep_timeseries_1
+        grid: gn
     scripts:
       Global_Ocean_Surface_mean_timeseries: &Global_Ocean_Surface_mean_timeseries
         script: ocean/diagnostic_timeseries.py
@@ -266,6 +322,7 @@ diagnostics:
     variables:
       thetao: # Temperature ocean 3D
         preprocessor: prep_timeseries_2
+        grid: gr
     scripts:
       Global_Ocean_DepthLayers_mean_timeseries: &Global_Ocean_DepthLayers_mean_timeseries
         script: ocean/diagnostic_timeseries.py
@@ -275,6 +332,7 @@ diagnostics:
     variables:
       tos: # Temperature ocean surface
         preprocessor: prep_timeseries_3
+        grid: gn
     scripts:
       Regional_Ocean_Surface_mean_timeseries: &Regional_Ocean_Surface_mean_timeseries
         script: ocean/diagnostic_timeseries.py
@@ -284,6 +342,7 @@ diagnostics:
     variables:
       thetao: # Temperature ocean 3D
         preprocessor: prep_timeseries_4
+        grid: gr
     scripts:
       Regional_Ocean_DepthLayers_mean_timeseries: &Regional_Ocean_DepthLayers_mean_timeseries
         script: ocean/diagnostic_timeseries.py
@@ -293,6 +352,7 @@ diagnostics:
     variables:
       thetao: # Temperature ocean 3D
         preprocessor: prep_timeseries_5
+        grid: gr
     scripts:
       Global_VolumeAverage_Ocean_Physics_timeseries: &Global_VolumeAverage_Ocean_Physics_timeseries
         script: ocean/diagnostic_timeseries.py
@@ -302,15 +362,17 @@ diagnostics:
     variables:
       thetao: # Temperature ocean 3D
         preprocessor: prep_timeseries_6
+        grid: gr
     scripts:
       Regional_VolumeAverage_Ocean_Physics_timeseries: &Regional_VolumeAverage_Ocean_Physics_timeseries
         script: ocean/diagnostic_timeseries.py
 
-  diag_timeseries_7:
+  diag_timeseries_7:   # Mismatch between extracted cube and 'volcello'
     description: Regional Volume to 100m depth average diagnostics
     variables:
       thetao: # Temperature ocean 3D averaged over top 100m
         preprocessor: prep_timeseries_7
+        grid: gr
     scripts:
       Regional_Volume100mAverage_Ocean_Physics_timeseries: &Regional_Volume100mAverage_Ocean_Physics_timeseries
         script: ocean/diagnostic_timeseries.py
@@ -323,6 +385,7 @@ diagnostics:
     variables:
       tos: # Temperature ocean surface
         preprocessor: prep_map_1
+        grid: gn
     scripts:
       Global_Ocean_Surface_mean_map: &Global_Ocean_Surface_mean_map
         script: ocean/diagnostic_maps.py
@@ -332,6 +395,7 @@ diagnostics:
     variables:
       tos: # Temperature ocean surface
         preprocessor: prep_map_2
+        grid: gn
     scripts:
       Global_Ocean_Surface_regrid_map: &Global_Ocean_Surface_regrid_map
         script: ocean/diagnostic_maps.py
@@ -341,6 +405,7 @@ diagnostics:
     variables:
       thetao: # Temperature ocean 3D
         preprocessor: prep_map_3
+        grid: gr
     scripts:
       Global_Ocean_DepthLayers_regrid_map: &Global_Ocean_DepthLayers_regrid_map
         script: ocean/diagnostic_maps.py
@@ -350,6 +415,7 @@ diagnostics:
     variables:
       tos: # Temperature ocean surface
         preprocessor: prep_map_4
+        grid: gn
     scripts:
       Regional_Ocean_Surface_regrid_map: &Regional_Ocean_Surface_regrid_map
         script: ocean/diagnostic_maps.py
@@ -359,6 +425,7 @@ diagnostics:
     variables:
       thetao: # Temperature ocean 3D
         preprocessor: prep_map_5
+        grid: gr
     scripts:
       Regional_Ocean_DepthLayers_mean_map: &Regional_Ocean_DepthLayers_mean_map
         script: ocean/diagnostic_maps.py
@@ -371,6 +438,7 @@ diagnostics:
     variables:
       thetao: # Temperature ocean 3D
         preprocessor: prep_transect_1
+        grid: gr
     scripts:
       Regional_Ocean_DepthLayers_regrid_transect: &Regional_Ocean_DepthLayers_regrid_transect
         script: ocean/diagnostic_transects.py
@@ -380,6 +448,7 @@ diagnostics:
     variables:
       thetao: # Temperature ocean 3D
         preprocessor: prep_transect_2
+        grid: gr
     scripts:
       Regional_Ocean_DepthLayers_slice_regrid_mmmean_transect: &Regional_Ocean_DepthLayers_slice_regrid_mmmean_transect
         script: ocean/diagnostic_transects.py
@@ -389,6 +458,7 @@ diagnostics:
     variables:
       thetao: # Temperature ocean 3D
         preprocessor: prep_transect_3
+        grid: gr
     scripts:
       Regional_Ocean_DepthLayers_AMTslice_regrid_mmmean_transect: &Regional_Ocean_DepthLayers_AMTslice_regrid_mmmean_transect
         script: ocean/diagnostic_transects.py
@@ -402,6 +472,7 @@ diagnostics:
     variables:
       thetao: # Temperature ocean surface
         preprocessor: prep_profile_1
+        grid: gr
     scripts:
       Global_Ocean_mean_profile: &Global_Ocean_mean_profile
         script: ocean/diagnostic_profiles.py
@@ -411,6 +482,7 @@ diagnostics:
     variables:
       thetao: # Temperature ocean surface
         preprocessor: prep_profile_2
+        grid: gr
     scripts:
       Regional_Ocean_mean_profile: &Regional_Ocean_mean_profile
         script: ocean/diagnostic_profiles.py
