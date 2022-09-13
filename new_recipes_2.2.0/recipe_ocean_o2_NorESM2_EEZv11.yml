@@ -1,0 +1,91 @@
+# ESMValTool
+# recipe_ocean_o2_NorESM2_EEZv11.yml
+---
+documentation:
+  description: |
+    Example recipe extracting precipitation in the EEZ (v11) region.
+
+#  authors:
+#    - tomas_torsvik
+#
+#  maintainer:
+#    - tomas_torsvik
+#
+  authors:
+    - demora_lee
+    - andela_bouwe
+
+  maintainer:
+    - demora_lee
+    - andela_bouwe
+
+  references:
+    - acknow_project
+
+  projects:
+    - esmval
+
+datasets:
+  - {dataset: NorESM2-MM, project: CMIP6, exp: historical, ensemble: r1i1p1f1, mip: Omon, start_year: 2001, end_year: 2002}
+
+
+preprocessors:
+  # Full year climate statistics from 2D field, EEZ extraction
+  prep_clim_full_EEZ_2D:
+    custom_order: true
+    climate_statistics:
+      operator: mean
+      period: full
+    regrid:
+      target_grid: 1x1
+      scheme: linear
+    extract_shape:
+      shapefile: shapefiles/World_EEZ_v11/World_EEZ_v11_20191118_HR_0_360/eez_v11_0_360.shp
+      crop: false
+
+  # Full year climate statistics from 3D field at prescribed levels, EEZ extraction
+  prep_clim_full_EEZ_3D_levels:
+    custom_order: true
+    extract_levels:
+      levels:  [0., 100., 200.]
+      scheme: linear_horizontal_extrapolate_vertical
+    climate_statistics:
+      operator: mean
+      period: full
+    regrid:
+      target_grid: 1x1
+      scheme: linear
+    extract_shape:
+      shapefile: shapefiles/World_EEZ_v11/World_EEZ_v11_20191118_HR_0_360/eez_v11_0_360.shp
+      crop: false
+
+diagnostics:
+
+  diag_clim_full_EEZ_2D:
+    description: Extract 2D full year climate data from the EEZ v11 region.
+    variables:
+      fgo2:
+        preprocessor: prep_clim_full_EEZ_2D
+        grid: gn
+    scripts:
+      Surface_regrid_map: &Surface_regrid_map
+        # Uncomment for map with coastline
+        script: ocean/diagnostic_maps.py
+        # Uncomment for map without coastline
+        #script: examples/diagnostic.py
+        #quickplot:
+        #  plot_type: pcolormesh
+
+  diag_clim_full_EEZ_3D_levels:
+    description: Extract levels from 3D full year climate data from the EEZ v11 region.
+    variables:
+      o2:
+        preprocessor: prep_clim_full_EEZ_3D_levels
+        grid: gr 
+    scripts:
+      Level_regrid_map: &Level_regrid_map
+        script: ocean/diagnostic_maps.py
+        # Uncomment for map without coastline
+        #script: examples/diagnostic.py
+        #quickplot:
+        #  plot_type: pcolormesh
