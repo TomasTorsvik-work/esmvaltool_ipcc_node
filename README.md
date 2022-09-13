@@ -1,5 +1,7 @@
 # Working with ESMValTool on the Nird-IPCC node
 
+2022-09-13 : Current installed version of ESMValTool : 2.5.0 and 2.6.0
+
 2020-06-26 : Current installed version of ESMValTool : 2.0.0b4
 
 - Documentation for [running ESMValTool on the ``ipcc.nird.sigma2.no`` node](https://noresm-docs.readthedocs.io/en/noresm2/diagnostics/esmvaltool.html#run-esmvaltool-on-nird-service-node)
@@ -34,10 +36,8 @@ fi
 ```
 3. load ESMValTool on nird
 ```bash
-conda activate /conda/esmvaltool/2.0.0b4
+conda activate /conda/esmvaltool/2.x.x
 ```
-Note, use the updated /conda/esmvaltool/2.x.xbx version
-
 4. copy the following config file and recipe to your favourite place
 ```bash
  /projects/NS9252K/share/tomast/esmvaltool_ipcc_node/config-ipcc_node.yml
@@ -45,7 +45,7 @@ Note, use the updated /conda/esmvaltool/2.x.xbx version
 ```
 5. run `esmvaltool`
 ```bash
-esmvaltool -c config-ipcc_node.yml ./recipe_python.yml
+esmvaltool run --config_file=config-ipcc_node.yml ./recipe_python.yml
 ```
 
 **All are encouraged to share your successfully configured recipes under `/projects/NS9252K/share` !!**
