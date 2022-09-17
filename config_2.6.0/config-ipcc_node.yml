@@ -30,7 +30,7 @@ drs:
 
 # Destination directory where all output will be written
 # Includes log files and performance stats.
-output_dir: /projects/NS2980K/www/${USER}/esmvaltool_output
+output_dir: /projects/NS2980K/www/${USER}/esmvaltool2.6.0
 
 # Directory for storing downloaded climate data
 download_dir: ~/climate_data
