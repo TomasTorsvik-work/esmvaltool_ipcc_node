@@ -1,0 +1,56 @@
+# ESMValTool
+# recipe_warning_lines_bergen.yml
+---
+documentation:
+  description: Reproduce Ed Hawkins' warming stripes visualization
+
+  title: Reproduce Ed Hawkins' warming stripes visualization
+
+  authors:
+    - righi_mattia
+
+  maintainer:
+    - righi_mattia
+
+  references:
+    - acknow_project
+
+  projects:
+    - crescendo
+
+datasets:
+  - &cmip6 {dataset: NorESM2-LM, project: CMIP6, mip: Amon, exp: historical,
+    ensemble: r1i1p1f1, grid: gn, start_year: 1850, end_year: 2014}
+  # - {<<: *cmip6, dataset: BCC-ESM1}
+  - &cmip5 {dataset: NorESM1-M, project: CMIP5, mip: Amon, exp: historical,
+    ensemble: r1i1p1, start_year: 1850, end_year: 2004}
+  # - {<<: *cmip5, dataset: CanESM2}
+
+preprocessors:
+  anomalies_bergen:
+    extract_point:
+      latitude: 60.389444
+      longitude: 5.330000
+      scheme: linear
+    anomalies:
+      period: month
+      reference:
+        start_year: 1971
+        start_month: 1
+        start_day: 1
+        end_year: 2000
+        end_month: 12
+        end_day: 31
+      standardize: false
+
+diagnostics:
+  diagnostic_warming_stripes:
+    description: visualize temperature anomalies as warming stripes
+    variables:
+      temperature_anomalies_bergen:
+        short_name: tas
+        preprocessor: anomalies_bergen
+    scripts:
+      warming_stripes_script:
+        script: ~/esmvaltool_tutorial/warming_stripes.py
+        colormap: 'bwr'
