@@ -33,6 +33,7 @@ WRITE_OPTS: &write_opts
 # --------------------------------------------------
 datasets:
 # working datasets
+   # - {dataset: NorESM2-LM,  project: CMIP6,  exp: historical,  ensemble: r1i1p1f1,  grid: gn, start_year: 2001,  end_year: 2004}
     - {dataset: NorESM2-MM,  project: CMIP6,  exp: historical,  ensemble: r1i1p1f1,  grid: gn, start_year: 2001,  end_year: 2004}
 
 
@@ -116,8 +117,6 @@ diagnostics:
         diff_range: [-50., 50.]
         additional_datasets:
           - {dataset: Landschuetzer2016,  project: OBS,  type: clim,  version: v2016,  start_year: 2000,  end_year: 2010,  tier: 2}
-     # areacello:
-     #   mip: fx
       spco2:
         preprocessor: prep_surface_map_2D
         reference_dataset: Landschuetzer2016
@@ -134,11 +133,13 @@ diagnostics:
         diff_range: [-0.1, 0.1]
         additional_datasets:
           - {dataset: Landschuetzer2016,  project: OBS,  type: clim,  version: v2016,  start_year: 2000,  end_year: 2010,  tier: 2}
+   # areacello:
+   #     mip: Ofx
     scripts:
       Global_Ocean_surface_map:
         script: ocean/diagnostic_maps.py
         <<: *write_opts
       Global_Ocean_model_vs_obs:
         script: ocean/diagnostic_model_vs_obs.py
-        observational_dataset: {dataset: Landschutzer2016, project: OBS}
+        observational_dataset: {dataset: Landschuetzer2016, project: OBS}
         <<: *write_opts
